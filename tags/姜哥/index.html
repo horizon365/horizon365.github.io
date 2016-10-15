@@ -434,17 +434,55 @@
 
 <div class="theme-info">
 
-    <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
-<script>
+    <script src="/js/firebase.js"></script>
+//<script>
   // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBynEPwYguNrQdhb1o2iOqYN8JGlZCQ5_k",
-    authDomain: "coder-self-train-count.firebaseapp.com",
-    databaseURL: "https://coder-self-train-count.firebaseio.com",
-    storageBucket: "",
-    messagingSenderId: "1069597117767"
-  };
-  firebase.initializeApp(config);
+  //var config = {
+    //apiKey: "AIzaSyBynEPwYguNrQdhb1o2iOqYN8JGlZCQ5_k",
+    //authDomain: "coder-self-train-count.firebaseapp.com",
+    //databaseURL: "https://coder-self-train-count.firebaseio.com",
+    //storageBucket: "",
+    //messagingSenderId: "1069597117767"
+  //};
+  //firebase.initializeApp(config);
+//</script>
+<script>
+//首先新建自己的firebase对象,使用自己创建应用时给的那个firebase URL
+var firebase = new Firebase("https://coder-self-train-count.firebaseio.com");
+
+//获取当前url作为记录的key，将"/"替换未"_"，并decode
+var curUrl = decodeURI(window.location.pathname.replace(/\/|\./g,"_"));
+
+//获取总数展示
+//这里的意思是获取firebase实例下的`sum`字段值
+firebase.child("sum").on("value",function(data){
+    var curCnt = data.val();
+    if(curCnt > 1){
+        if($("#totalCnt").length){
+            $("#totalCnt").remove();
+        }
+        //我将总量放在了底部，当然位置是随意的
+        $("span.author").append(" | <span id='totalCnt'>总访问量：" + curCnt + "次");
+    }
+});
+
+//获取page明细
+//这里的意思是获取firebase实例下的`page`字段下`cruUrl`key对应的值
+firebase.child("page/" + curUrl).on("value",function(data){
+    var pageCnt = data.val();
+    if(pageCnt > 1){
+        $("#detail_cnt").text(pageCnt);
+    }
+});
+
+//将访问总数和明细+1
+firebase.child("sum").transaction(function(curCnt){
+    return (curCnt || 0) + 1;
+});
+
+firebase.child("page/" + curUrl).transaction(function(curCnt){
+    return (curCnt || 0) + 1;
+});
 </script>
 
 
