@@ -1,90 +1,11 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next pisces use-motion">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
+  <meta charset="utf-8">
   
-  
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="蟒蛇," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
-
-
-
-
-
-
-<meta name="description" content="&amp;#x672C;&amp;#x7BC7;&amp;#x4E3A;Python&amp;#x65F6;&amp;#x95F4;&amp;#x8FD0;&amp;#x7B97;&amp;#x7684;&amp;#x8BE6;&amp;#x7EC6;&amp;#x673A;&amp;#x5236;&amp;#x63A2;&amp;#x8BA8;&amp;#xFF0C;&amp;#x5FEB;&amp;#x901F;&amp;#x8FD0;&amp;#x7528;Python&amp;#x7684;datetime&amp;#x8FDB;&amp;#x884C;&amp;#x6">
+  <title>Python时间运算的详细机制探讨 | 码农的自我修养</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="&amp;#x672C;&amp;#x7BC7;&amp;#x4E3A;Python&amp;#x65F6;&amp;#x95F4;&amp;#x8FD0;&amp;#x7B97;&amp;#x7684;&amp;#x8BE6;&amp;#x7EC6;&amp;#x673A;&amp;#x5236;&amp;#x63A2;&amp;#x8BA8;&amp;#xFF0C;&amp;#x5FEB;&amp;#x901F;&amp;#x8FD0;&amp;#x7528;Python&amp;#x7684;datetime&amp;#x8FDB;&amp;#x884C;&amp;#x6">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python时间运算的详细机制探讨">
 <meta property="og:url" content="http://yoursite.com/2016/10/13/Python时间运算的详细机制探讨/index.html">
@@ -96,254 +17,79 @@
 <meta name="twitter:title" content="Python时间运算的详细机制探讨">
 <meta name="twitter:description" content="&amp;#x672C;&amp;#x7BC7;&amp;#x4E3A;Python&amp;#x65F6;&amp;#x95F4;&amp;#x8FD0;&amp;#x7B97;&amp;#x7684;&amp;#x8BE6;&amp;#x7EC6;&amp;#x673A;&amp;#x5236;&amp;#x63A2;&amp;#x8BA8;&amp;#xFF0C;&amp;#x5FEB;&amp;#x901F;&amp;#x8FD0;&amp;#x7528;Python&amp;#x7684;datetime&amp;#x8FDB;&amp;#x884C;&amp;#x6">
 <meta name="twitter:image" content="http://yoursite.com/2016/10/13/Python时间运算的详细机制探讨/time.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="码农的自我修养" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
 
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Pisces',
-    sidebar: {"position":"right","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 6330021304485283000,
-      author: '博主'
-    }
-  };
-</script>
-
-
-
-
-  <link rel="canonical" href="http://yoursite.com/2016/10/13/Python时间运算的详细机制探讨/"/>
-
-  <title> Python时间运算的详细机制探讨 | 码农的自我修养 </title>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-right page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">码农的自我修养</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">Coder-Self-Train</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">码农的自我修养</a>
+      </h1>
       
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Coder-Self-Train</a>
+        </h2>
       
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-commonweal">
-          <a href="/404.html" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
-            
-            公益404
-          </a>
-        </li>
-      
-
-      
-        <li class="menu-item menu-item-search">
-          
-            <a href="javascript:;" class="st-search-show-outputs">
-          
-            
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
-            
-            搜索
-          </a>
-        </li>
-      
-    </ul>
-  
-
-  
-    <div class="site-search">
-      
-  <form class="site-search-form">
-  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
-</form>
-
-<script type="text/javascript">
-  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
-    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
-    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
-  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
-
-  _st('install', '4ZSxnAkTdxqWnsxa6jgK','2.0.0');
-</script>
-
-
-
     </div>
-  
-</nav>
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Python时间运算的详细机制探讨" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/10/13/Python时间运算的详细机制探讨/" class="article-date">
+  <time datetime="2016-10-13T01:56:11.000Z" itemprop="datePublished">2016-10-13</time>
+</a>
     
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+  </div>
+  <div class="article-inner">
     
-      <header class="post-header">
-
+    
+      <header class="article-header">
         
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Python时间运算的详细机制探讨
-              
-            
-          </h1>
-        
+  
+    <h1 class="article-title" itemprop="name">
+      Python时间运算的详细机制探讨
+    </h1>
+  
 
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-13T09:56:11+08:00" content="2016-10-13">
-              2016-10-13
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/13/Python时间运算的详细机制探讨/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/13/Python时间运算的详细机制探讨/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-
-	
-    <span class="post-visit-count">
-      &nbsp; | &nbsp; 
-      <!--眼睛图标-->
-      <i class="fa fa-eye"></i>&nbsp;
-      <span id="detail_cnt">1</span>
-    </span>
-
-
-        </div>
       </header>
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
+    <div class="article-entry" itemprop="articleBody">
       
         <p>&#x672C;&#x7BC7;&#x4E3A;Python&#x65F6;&#x95F4;&#x8FD0;&#x7B97;&#x7684;&#x8BE6;&#x7EC6;&#x673A;&#x5236;&#x63A2;&#x8BA8;&#xFF0C;&#x5FEB;&#x901F;&#x8FD0;&#x7528;Python&#x7684;datetime&#x8FDB;&#x884C;&#x65F6;&#x95F4;&#x8FD0;&#x7B97;&#x8BF7;&#x53C2;&#x8003;<a href="http://coderselftrain.com/2016/10/09/%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%BF%AB%E9%80%9F%E8%BF%9B%E8%A1%8Cpython%E6%97%B6%E9%97%B4%E8%BF%90%E7%AE%97/" target="_blank" rel="external">&#x4E00;&#x53E5;&#x8BDD;&#x5FEB;&#x901F;&#x8FDB;&#x884C;python&#x65F6;&#x95F4;&#x8FD0;&#x7B97;</a><br><a id="more"></a><br>&#x6211;&#x4EEC;&#x5148;&#x6765;&#x770B;&#x4E00;&#x5F20;&#x56FE;&#xFF1A;</p>
 <p><img src="/2016/10/13/Python&#x65F6;&#x95F4;&#x8FD0;&#x7B97;&#x7684;&#x8BE6;&#x7EC6;&#x673A;&#x5236;&#x63A2;&#x8BA8;/time.jpg" alt=""></p>
@@ -370,373 +116,136 @@
 
       
     </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/10/13/Python时间运算的详细机制探讨/" data-id="civ3w9oz2000381pv6c6wo2ic" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/蟒蛇/">蟒蛇</a></li></ul>
 
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div></div>
-    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
-    </button>
-    <div id="QR" style="display: none;">
-      
-        <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="/images/mm_facetoface_collect_qrcode_1474537300307.png" alt="刘义群 WeChat Pay"/>
-          <p>微信打赏</p>
-        </div>
-      
-      
-    </div>
-  </div>
-
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/蟒蛇/" rel="tag">#蟒蛇</a>
-          
-        </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/10/11/Python基础干货在线练习网站推荐/" rel="next" title="Python基础干货在线练习网站推荐">
-                <i class="fa fa-chevron-left"></i> Python基础干货在线练习网站推荐
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/11/04/pycharm-5-2016-注册服务器-亲测可用/" rel="prev" title="pycharm 5/2016 注册服务器 亲测可用">
-                pycharm 5/2016 注册服务器 亲测可用 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
     </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
   </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/10/13/Python时间运算的详细机制探讨/"
-           data-title="Python时间运算的详细机制探讨" data-url="http://yoursite.com/2016/10/13/Python时间运算的详细机制探讨/">
-      </div>
-    
-  </div>
-
-
-        </div>
-        
-          
   
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    
+<nav id="article-nav">
+  
+    <a href="/2016/11/04/pycharm-5-2016-注册服务器-亲测可用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          pycharm 5/2016 注册服务器 亲测可用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/10/11/Python基础干货在线练习网站推荐/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Python基础干货在线练习网站推荐</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/告别假日综合症/">告别假日综合症</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/大象数据库/">大象数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/姜哥/">姜哥</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/盗版的Vmware/">盗版的Vmware</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/盗版的pycharm/">盗版的pycharm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/蟒蛇/">蟒蛇</a></li></ul>
     </div>
   </div>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
 
-      
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/告别假日综合症/" style="font-size: 10px;">告别假日综合症</a> <a href="/tags/大象数据库/" style="font-size: 10px;">大象数据库</a> <a href="/tags/姜哥/" style="font-size: 15px;">姜哥</a> <a href="/tags/盗版的Vmware/" style="font-size: 10px;">盗版的Vmware</a> <a href="/tags/盗版的pycharm/" style="font-size: 10px;">盗版的pycharm</a> <a href="/tags/蟒蛇/" style="font-size: 20px;">蟒蛇</a>
+    </div>
+  </div>
 
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/11/04/pycharm-5-2016-注册服务器-亲测可用/">pycharm 5/2016 注册服务器 亲测可用</a>
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
+        
+          <li>
+            <a href="/2016/10/13/Python时间运算的详细机制探讨/">Python时间运算的详细机制探讨</a>
           </li>
-        </ul>
-      
-
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
-               alt="刘义群" />
-          <p class="site-author-name" itemprop="name">刘义群</p>
-          <p class="site-description motion-element" itemprop="description"></p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">10</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">6</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
         
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
+          <li>
+            <a href="/2016/10/11/Python基础干货在线练习网站推荐/">Python基础干货在线练习网站推荐</a>
+          </li>
         
+          <li>
+            <a href="/2016/10/09/一句话快速进行python时间运算/">一句话快速进行python时间运算</a>
+          </li>
         
-
+          <li>
+            <a href="/2016/09/30/如何修改postgresql的search-path以及限定其作用范围/">如何修改postgresql的search_path以及限定其作用范围</a>
+          </li>
         
-        
-
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <p class="post-toc-empty">此文章未包含目录</p>
-            
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">刘义群</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
-  </a>
-</div>
-
-<div class="theme-info">
-
-    <script src="/js/firebase.js"></script>
-<script>
-//首先新建自己的firebase对象,使用自己创建应用时给的那个firebase URL
-var firebase = new Firebase("https://coder-self-train-count.firebaseio.com");
-
-//获取当前url作为记录的key，将"/"替换未"_"，并decode
-var curUrl = decodeURI(window.location.pathname.replace(/\/|\./g,"_"));
-
-//获取总数展示
-//这里的意思是获取firebase实例下的`sum`字段值
-firebase.child("sum").on("value",function(data){
-    var curCnt = data.val();
-    if(curCnt > 1){
-        if($("#totalCnt").length){
-            $("#totalCnt").remove();
-        }
-        //我将总量放在了底部，当然位置是随意的
-        $("span.author").append(" | <span id='totalCnt'>总访问量：" + curCnt + "次");
-    }
-});
-
-//获取page明细
-//这里的意思是获取firebase实例下的`page`字段下`cruUrl`key对应的值
-firebase.child("page/" + curUrl).on("value",function(data){
-    var pageCnt = data.val();
-    if(pageCnt > 1){
-        $("#detail_cnt").text(pageCnt);
-    }
-});
-
-//将访问总数和明细+1
-firebase.child("sum").transaction(function(curCnt){
-    return (curCnt || 0) + 1;
-});
-
-firebase.child("page/" + curUrl).transaction(function(curCnt){
-    return (curCnt || 0) + 1;
-});
-</script>
-
-
-</div>
-
-        
-
-        
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
+      </ul>
     </div>
   </div>
 
   
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
+</aside>
+        
+      </div>
+      <footer id="footer">
   
-
-
-
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 刘义群<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
   
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
+    <a href="/" class="mobile-nav-link">Home</a>
   
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
+    <a href="/archives" class="mobile-nav-link">Archives</a>
   
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
-
-
-
-  
-
-  
+</nav>
     
-  
 
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"coderselftrain"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
-    
-    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
-  
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
+<script src="/js/script.js"></script>
 
-
-  
-  
-
-  
-
-  
-
-  
-
+  </div>
 </body>
 </html>
